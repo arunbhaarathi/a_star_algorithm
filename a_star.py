@@ -1,10 +1,11 @@
 import pygame
+import sys
 
 pygame.init()
 WIN_SIZE=600
 WHITE=(255,255,255)
 BLACK=(0,0,0)
-GREEN=(0,255.0)
+GREEN=(0,255,0)
 RED=(255,0,0)
 
 screen=pygame.display.set_mode((WIN_SIZE,WIN_SIZE))
@@ -40,7 +41,7 @@ def create_grid(rows,cols,node_size):
         for col in range(cols):
             node=cell((row,col))
             grid[row].append(node)
-            pygame.draw.rect(screen, (0,0,0), (col * node_size, row * node_size, node_size, node_size), 1)
+            # pygame.draw.rect(screen, (0,0,0), (col * node_size, row * node_size, node_size, node_size), 1)
 
     return grid
 
@@ -97,14 +98,15 @@ def main(win_size,rows):
             #         grid[row][col].visited=not grid[row][col].visited
 
         
-            # for row in range(rows):
-            #     for col in range(rows):
-            #         color = grid[row][col].color
-            #         if color is None:
-            #             print(row,col)
-            #         # print(color)
-            #         pygame.draw.rect(screen,color,(col * node_size, row * node_size, node_size, node_size))
-                # pygame.draw.rect(screen, (0,0,0), (col * node_size, row * node_size, node_size, node_size), 1)
+            for row in range(rows):
+                for col in range(rows):
+                    color = grid[row][col].color
+                    if color is None:
+                        print(row,col)
+                        sys.exit()
+                    print((row,col,color))
+                    pygame.draw.rect(screen,color,(col * node_size, row * node_size, node_size, node_size))
+                    pygame.draw.rect(screen, (0,0,0), (col * node_size, row * node_size, node_size, node_size), 1)
 
 
 
