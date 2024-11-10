@@ -1,5 +1,7 @@
 import pygame
 import sys
+from queue import PriorityQueue
+import itertools
 
 pygame.init()
 WIN_SIZE=600
@@ -7,6 +9,7 @@ WHITE=(255,255,255)
 BLACK=(0,0,0)
 GREEN=(0,255,0)
 RED=(255,0,0)
+BLUE=(0,0,255)
 
 screen=pygame.display.set_mode((WIN_SIZE,WIN_SIZE))
 pygame.display.set_caption("A-STAR ALGORITHM")
@@ -14,9 +17,9 @@ pygame.display.set_caption("A-STAR ALGORITHM")
 
 class cell:
     def __init__(self, pos):
-        self.position=pos
-        self.g=0
-        self.h=0
+        self.position=pos #(row,col)
+        self.g=float('inf')
+        self.h=float('inf')
         self.neighbors=[]
         self.parent=None
         self.visited=False
@@ -26,14 +29,29 @@ class cell:
     def calcualte_h(self):
         pass
 
-    def set_neighbors(self):
-        pass
+    def get_neighbors(self, grid, rows):
+        # Define neighbors with boundary checks
+        up = grid[self.position[0] - 1][self.position[1]] if self.position[0] - 1 >= 0 else None
+        down = grid[self.position[0] + 1][self.position[1]] if self.position[0] + 1 < rows else None
+        left = grid[self.position[0]][self.position[1] - 1] if self.position[1] - 1 >= 0 else None
+        right = grid[self.position[0]][self.position[1] + 1] if self.position[1] + 1 < rows else None
+
+        if up is not None and up.color != BLACK:
+            self.neighbors.append(up)
+        if down is not None and down.color != BLACK:
+            self.neighbors.append(down)
+        if left is not None and left.color != BLACK:
+            self.neighbors.append(left)
+        if right is not None and right.color != BLACK:
+            self.neighbors.append(right)
+        
+        return self.neighbors
+
     
     def set_color(self,color):
         self.color=color
 
 def create_grid(rows,cols,node_size):
-    # grid=[[cell() for _ in range(cols)] for _ in range(rows)]
     grid=[]
     screen.fill((255,255,255))
     for row in range(rows):
@@ -44,6 +62,61 @@ def create_grid(rows,cols,node_size):
             # pygame.draw.rect(screen, (0,0,0), (col * node_size, row * node_size, node_size, node_size), 1)
 
     return grid
+
+def man_dist(pos1,pos2):
+    return abs(pos1[0]-pos2[0])+abs(pos1[1]-pos2[1])
+
+def reconstruct_path(start,goal):
+    path=[]
+    curr_node=goal
+    while curr_node!=start:
+        # path.append(curr_node)
+        
+        curr_node=curr_node.parent
+        curr_node.color=BLUE
+    # return path[::-1]
+
+
+
+def astar(start,goal,grid,rows):
+    # compute_heuristics(grid,rows,start,goal)
+
+    open_list=PriorityQueue()
+    open_list_tracker=set()
+    counter=itertools.count()
+    open_list.put((0,next(counter),start))
+    open_list_tracker.add(start)
+    start.g=0
+    closed_list=[]#consider making it a set for better performance
+    # open_list.append(start)
+    # f=float("inf")
+
+    while open_list:
+        current_node=open_list.get()[2]
+        # print("curretn nopde",current_node)
+
+        if current_node==goal:
+            reconstruct_path(start,goal)
+            return
+
+
+        neighbors=current_node.get_neighbors(grid,rows)
+
+        for node in neighbors:
+            if node in closed_list:
+                continue
+            
+            current_g=current_node.g+1
+            if current_g<node.g:
+                node.g=current_g
+            node.h=man_dist(node.position,goal.position)
+            if node not in open_list_tracker:
+                f=node.g+node.h
+                # print("f:",f)
+                open_list.put((f,next(counter),node))
+                open_list_tracker.add(node)
+                node.parent=current_node
+        closed_list.append(current_node)
 
 
 
@@ -91,12 +164,6 @@ def main(win_size,rows):
                     else:
                         selected_node.color=WHITE
 
-            # elif event.type==pygame.MOUSEBUTTONDOWN:
-            #     if event.button==3:
-            #         x,y=pygame.mouse.get_pos()
-            #         row,col=y//node_size,x//node_size
-            #         grid[row][col].visited=not grid[row][col].visited
-
         
             for row in range(rows):
                 for col in range(rows):
@@ -104,9 +171,14 @@ def main(win_size,rows):
                     if color is None:
                         print(row,col)
                         sys.exit()
-                    print((row,col,color))
+                    # print((row,col,color))
                     pygame.draw.rect(screen,color,(col * node_size, row * node_size, node_size, node_size))
                     pygame.draw.rect(screen, (0,0,0), (col * node_size, row * node_size, node_size, node_size), 1)
+
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    astar(start_node,goal_node,grid,rows)
 
 
 
