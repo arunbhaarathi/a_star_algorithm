@@ -81,6 +81,12 @@ def reconstruct_path(start,goal):
         curr_node.set_color(BLUE)
     # return path[::-1]
 
+def grid_reset(rows,cols,grid):
+    for row in range(rows):
+        for col in range(cols):
+            grid[row][col].color=WHITE
+    
+
 
 
 def astar(start,goal,grid,rows):
@@ -186,7 +192,9 @@ def main(win_size,rows):
                 if event.key == pygame.K_SPACE:
                     astar(start_node,goal_node,grid,rows)
 
-
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    grid_reset(rows,rows,grid)
 
             pygame.display.flip()
 
