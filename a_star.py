@@ -145,8 +145,7 @@ def main(win_size,rows):
             if event.type==pygame.QUIT:
                 run =False
 
-            if event.type==pygame.MOUSEBUTTONDOWN:
-                if event.button ==1:
+            if pygame.mouse.get_pressed()[0]:
                     x,y=pygame.mouse.get_pos()
                     row,col=y//node_size,x//node_size
                     selected_node=grid[row][col]
@@ -158,18 +157,18 @@ def main(win_size,rows):
                         goal_node.color=GREEN
                     else:
                         selected_node.color=BLACK
-                elif event.button==3:
-                    x,y=pygame.mouse.get_pos()
-                    row,col=y//node_size,x//node_size
-                    selected_node=grid[row][col]
-                    if selected_node==start_node:
-                        start_node.color=WHITE
-                        start_node=None
-                    elif selected_node==goal_node:
-                        goal_node.color=WHITE
-                        goal_node=None
-                    else:
-                        selected_node.color=WHITE
+            elif pygame.mouse.get_pressed()[2]:
+                x,y=pygame.mouse.get_pos()
+                row,col=y//node_size,x//node_size
+                selected_node=grid[row][col]
+                if selected_node==start_node:
+                    start_node.color=WHITE
+                    start_node=None
+                elif selected_node==goal_node:
+                    goal_node.color=WHITE
+                    goal_node=None
+                else:
+                    selected_node.color=WHITE
 
         
             for row in range(rows):
