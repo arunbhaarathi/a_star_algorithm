@@ -20,16 +20,14 @@ class cell:
         self.position=pos #(row,col)
         self.g=float('inf')
         self.h=float('inf')
-        self.neighbors=[]
         self.parent=None
-        self.visited=False
         self.color=WHITE
-        self.is_obstacle=False
 
     def calcualte_h(self):
         pass
 
     def get_neighbors(self, grid, rows):
+        self.neighbors=[]
         # Define neighbors with boundary checks
         up = grid[self.position[0] - 1][self.position[1]] if self.position[0] - 1 >= 0 else None
         down = grid[self.position[0] + 1][self.position[1]] if self.position[0] + 1 < rows else None
@@ -84,7 +82,7 @@ def astar(start,goal,grid,rows):
     open_list=PriorityQueue()
     open_list_tracker=set()
     counter=itertools.count()
-    open_list.put((0,next(counter),start))
+    open_list.put((0,next(counter),start))#counter to tie-break nodes with same priority
     open_list_tracker.add(start)
     start.g=0
     closed_list=[]#consider making it a set for better performance
@@ -93,6 +91,7 @@ def astar(start,goal,grid,rows):
 
     while open_list:
         current_node=open_list.get()[2]
+        open_list_tracker.remove(current_node)
         # print("curretn nopde",current_node)
 
         if current_node==goal:
