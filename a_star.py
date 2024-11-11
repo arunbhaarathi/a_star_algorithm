@@ -23,8 +23,9 @@ class cell:
         self.parent=None
         self.color=WHITE
 
-    def calcualte_h(self):
-        pass
+    def calcualte_h(self,goal):
+        #manhattan distance
+        self.h=abs(self.position[0]-goal.position[0])+abs(self.position[1]-goal.position[1])
 
     def get_neighbors(self, grid, rows):
         self.neighbors=[]
@@ -61,8 +62,6 @@ def create_grid(rows,cols,node_size):
 
     return grid
 
-def man_dist(pos1,pos2):
-    return abs(pos1[0]-pos2[0])+abs(pos1[1]-pos2[1])
 
 def reconstruct_path(start,goal):
     path=[]
@@ -108,7 +107,7 @@ def astar(start,goal,grid,rows):
             current_g=current_node.g+1
             if current_g<node.g:
                 node.g=current_g
-            node.h=man_dist(node.position,goal.position)
+            node.calcualte_h(goal)
             if node not in open_list_tracker:
                 f=node.g+node.h
                 # print("f:",f)
