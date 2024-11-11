@@ -70,7 +70,7 @@ def reconstruct_path(start,goal):
         # path.append(curr_node)
         
         curr_node=curr_node.parent
-        curr_node.color=BLUE
+        curr_node.set_color(BLUE)
     # return path[::-1]
 
 
