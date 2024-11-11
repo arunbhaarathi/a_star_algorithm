@@ -81,10 +81,13 @@ def reconstruct_path(start,goal):
         curr_node.set_color(BLUE)
     # return path[::-1]
 
-def grid_reset(rows,cols,grid):
+def grid_reset(rows,cols,grid,start,goal):
     for row in range(rows):
         for col in range(cols):
             grid[row][col].color=WHITE
+    start=None
+    goal=None
+    return start,goal
     
 
 
@@ -194,7 +197,7 @@ def main(win_size,rows):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
-                    grid_reset(rows,rows,grid)
+                    start_node,goal_node=grid_reset(rows,rows,grid,start_node,goal_node)
 
             pygame.display.flip()
 
