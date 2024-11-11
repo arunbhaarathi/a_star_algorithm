@@ -161,7 +161,7 @@ def main(win_size,rows):
                     elif goal_node is None:
                         goal_node=selected_node
                         goal_node.color=GREEN
-                    else:
+                    elif selected_node!=start_node and selected_node!=goal_node:
                         selected_node.color=BLACK
             elif pygame.mouse.get_pressed()[2]:
                 x,y=pygame.mouse.get_pos()
