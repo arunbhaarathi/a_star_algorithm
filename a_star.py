@@ -52,7 +52,7 @@ class cell:
 
 def create_grid(rows,cols,node_size):
     grid=[]
-    screen.fill((255,255,255))
+    # screen.fill((255,255,255))
     for row in range(rows):
         grid.append([])
         for col in range(cols):
@@ -62,9 +62,17 @@ def create_grid(rows,cols,node_size):
 
     return grid
 
+def draw_grid(rows,cols,grid,node_size):
+    # screen.fill(WHITE)
+    for row in range(rows):
+        for col in range(cols):
+            pygame.draw.rect(screen, grid[row][col].color,(col*node_size,row*node_size,node_size,node_size))
+            pygame.draw.rect(screen, BLACK,(col*node_size,row*node_size,node_size,node_size),1)
+    return
+
 
 def reconstruct_path(start,goal):
-    path=[]
+
     curr_node=goal
     while curr_node!=start:
         # path.append(curr_node)
@@ -132,6 +140,7 @@ def main(win_size,rows):
     run=True
 
     while run:
+        draw_grid(rows,rows,grid,node_size)
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 run =False
@@ -170,8 +179,8 @@ def main(win_size,rows):
                         print(row,col)
                         sys.exit()
                     # print((row,col,color))
-                    pygame.draw.rect(screen,color,(col * node_size, row * node_size, node_size, node_size))
-                    pygame.draw.rect(screen, (0,0,0), (col * node_size, row * node_size, node_size, node_size), 1)
+                    # pygame.draw.rect(screen,color,(col * node_size, row * node_size, node_size, node_size))
+                    # pygame.draw.rect(screen, (0,0,0), (col * node_size, row * node_size, node_size, node_size), 1)
 
 
             if event.type == pygame.KEYDOWN:
