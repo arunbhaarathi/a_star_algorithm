@@ -109,7 +109,7 @@ def astar(start,goal,grid,rows,node_size):
     open_list.put((0,next(counter),start))#counter to tie-break nodes with same priority
     open_list_tracker.add(start)
     start.g=0
-    closed_list=[]#consider making it a set for better performance
+    closed_list=set()
     # open_list.append(start)
     # f=float("inf")
 
@@ -144,7 +144,7 @@ def astar(start,goal,grid,rows,node_size):
                 node.parent=current_node
         current_node.color=GRAY
         visualize_search(current_node.position[0],current_node.position[1],node_size,node.color)
-        closed_list.append(current_node)
+        closed_list.add(current_node)
     print("No path found")
     return
 
