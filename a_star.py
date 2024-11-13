@@ -10,6 +10,9 @@ BLACK=(0,0,0)
 GREEN=(0,255,0)
 RED=(255,0,0)
 BLUE=(0,0,255)
+YELLOW=(255, 223, 0)
+GRAY=(128, 128, 128)
+
 
 screen=pygame.display.set_mode((WIN_SIZE,WIN_SIZE))
 pygame.display.set_caption("A-STAR ALGORITHM")
@@ -68,8 +71,13 @@ def draw_grid(rows,cols,grid,node_size):
         for col in range(cols):
             pygame.draw.rect(screen, grid[row][col].color,(col*node_size,row*node_size,node_size,node_size))
             pygame.draw.rect(screen, BLACK,(col*node_size,row*node_size,node_size,node_size),1)
+            # pygame.display.flip()
     return
 
+def visualize_search(row,col,node_size,color):
+    pygame.draw.rect(screen, color,(col*node_size,row*node_size,node_size,node_size))
+    pygame.draw.rect(screen, BLACK,(col*node_size,row*node_size,node_size,node_size),1)
+    pygame.display.flip()
 
 def reconstruct_path(start,goal):
 
@@ -92,7 +100,7 @@ def grid_reset(rows,cols,grid,start,goal):
 
 
 
-def astar(start,goal,grid,rows):
+def astar(start,goal,grid,rows,node_size):
     # compute_heuristics(grid,rows,start,goal)
 
     open_list=PriorityQueue()
@@ -130,7 +138,12 @@ def astar(start,goal,grid,rows):
                 # print("f:",f)
                 open_list.put((f,next(counter),node))
                 open_list_tracker.add(node)
+                node.color=YELLOW
+                visualize_search(node.position[0],node.position[1],node_size,node.color)
+                # draw_grid(rows,rows,grid,node_size)
                 node.parent=current_node
+        current_node.color=GRAY
+        visualize_search(current_node.position[0],current_node.position[1],node_size,node.color)
         closed_list.append(current_node)
     print("No path found")
     return
@@ -195,7 +208,7 @@ def main(win_size,rows):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    astar(start_node,goal_node,grid,rows)
+                    astar(start_node,goal_node,grid,rows,node_size)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
@@ -206,11 +219,10 @@ def main(win_size,rows):
 
     pygame.quit()
 
-main(WIN_SIZE,10)
+main(WIN_SIZE,50)
 
 
-"""THings to add:
-    1) case where there is no path 
+"""THings to add: 
     2) Visualize the graph traversal
     3) cleanup code
     4) add docstrings
