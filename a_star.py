@@ -105,7 +105,7 @@ def astar(start,goal,grid,rows):
     # open_list.append(start)
     # f=float("inf")
 
-    while open_list:
+    while not open_list.empty():
         current_node=open_list.get()[2]
         open_list_tracker.remove(current_node)
         # print("curretn nopde",current_node)
@@ -132,6 +132,8 @@ def astar(start,goal,grid,rows):
                 open_list_tracker.add(node)
                 node.parent=current_node
         closed_list.append(current_node)
+    print("No path found")
+    return
 
 
 
@@ -204,4 +206,13 @@ def main(win_size,rows):
 
     pygame.quit()
 
-main(WIN_SIZE,20)
+main(WIN_SIZE,10)
+
+
+"""THings to add:
+    1) case where there is no path 
+    2) Visualize the graph traversal
+    3) cleanup code
+    4) add docstrings
+    5) crerate unittest
+    """
